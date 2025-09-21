@@ -69,15 +69,47 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self 
+    where
+        T: Ord,  // 要求元素可比较大小
+    {
+        let mut result = LinkedList::new();
+        let mut a_current = list_a.start;
+        let mut b_current = list_b.start;
+        
+        // 遍历两个链表，比较并添加较小的元素
+        while let (Some(a_ptr), Some(b_ptr)) = (a_current, b_current) {
+            let a_node = unsafe { a_ptr.as_ref() };
+            let b_node = unsafe { b_ptr.as_ref() };
+            
+            if a_node.val <= b_node.val {
+                // 将a_node的值添加到结果链表
+                result.add(a_node.val.clone());
+                // 移动a链表指针
+                a_current = a_node.next;
+            } else {
+                // 将b_node的值添加到结果链表
+                result.add(b_node.val.clone());
+                // 移动b链表指针
+                b_current = b_node.next;
+            }
         }
-	}
+        
+        // 添加剩余的元
+        while let Some(a_ptr) = a_current {
+            let a_node = unsafe { a_ptr.as_ref() };
+            result.add(a_node.val.clone());
+            a_current = a_node.next;
+        }
+        
+        while let Some(b_ptr) = b_current {
+            let b_node = unsafe { b_ptr.as_ref() };
+            result.add(b_node.val.clone());
+            b_current = b_node.next;
+        }
+        
+        result
+    }
 }
 
 impl<T> Display for LinkedList<T>
