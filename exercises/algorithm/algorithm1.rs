@@ -95,7 +95,7 @@ impl<T> LinkedList<T> {
             }
         }
         
-        // 添加
+        // 
         while let Some(a_ptr) = a_current {
             let a_node = unsafe { a_ptr.as_ref() };
             result.add(a_node.val.clone());
