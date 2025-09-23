@@ -10,8 +10,7 @@
 
 fn vec_loop(mut v: Vec<i32>) -> Vec<i32> {
     for element in v.iter_mut() {
-        // TODO: Fill this up so that each element in the Vec `v` is
-        // multiplied by 2.
+        // 直接修改向量中的每个元素，将其乘以2
         *element *= 2;
     }
 
@@ -21,8 +20,7 @@ fn vec_loop(mut v: Vec<i32>) -> Vec<i32> {
 
 fn vec_map(v: &Vec<i32>) -> Vec<i32> {
     v.iter().map(|element| {
-        // TODO: Do the same thing as above - but instead of mutating the
-        // Vec, you can just return the new number!
+        // 通过map方法创建一个新的向量，其中每个元素是原元素的2倍
         element * 2
     }).collect()
 }
