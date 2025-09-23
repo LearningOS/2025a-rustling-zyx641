@@ -44,6 +44,41 @@ impl Default for Person {
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        // Step 1: Check if string is empty
+        if s.is_empty() {
+            return Person::default();
+        }
+        
+        // Step 2: Split the string on commas
+        let mut parts = s.split(',');
+        
+        // Step 3: Extract the first element as name
+        if let Some(name_part) = parts.next() {
+            // Step 4: Check if name is empty
+            if name_part.is_empty() {
+                return Person::default();
+            }
+            
+            // Step 5: Extract and parse the age
+            if let Some(age_part) = parts.next() {
+                // Check for trailing parts (extra commas or additional fields)
+                if parts.next().is_some() {
+                    return Person::default();
+                }
+                
+                // Try to parse the age as a usize
+                if let Ok(age) = age_part.parse::<usize>() {
+                    // All validations passed, return the new Person
+                    return Person {
+                        name: name_part.to_string(),
+                        age,
+                    };
+                }
+            }
+        }
+        
+        // If any step failed, return the default Person
+        Person::default()
     }
 }
 
