@@ -5,8 +5,21 @@
 */
 // I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+fn sort<T: Ord>(array: &mut [T]){
+    // 实现插入排序算法
+    let len = array.len();
+    if len <= 1 {
+        return; // 空数组或只有一个元素的数组已经是排序的
+    }
+    
+    for i in 1..len {
+        let mut j = i;
+        // 将当前元素向前移动，直到找到正确的位置
+        while j > 0 && array[j] < array[j-1] {
+            array.swap(j, j-1);
+            j -= 1;
+        }
+    }
 }
 #[cfg(test)]
 mod tests {
