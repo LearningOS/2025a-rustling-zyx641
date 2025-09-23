@@ -27,7 +27,7 @@ enum ParsePersonError {
     BadLen,
     // Empty name field
     NoName,
-    // Wrapped error from parse::<usize>()
+    // Wrapped error from parse::<usize>(),
     ParseInt(ParseIntError),
 }
 
@@ -40,7 +40,7 @@ enum ParsePersonError {
 //    error
 // 4. Extract the first element from the split operation and use it as the name
 // 5. Extract the other element from the split operation and parse it into a
-//    `usize` as the age with something like `"4".parse::<usize>()`
+//    `usize` as the age with something like "4".parse::<usize>(),
 // 6. If while extracting the name and the age something goes wrong, an error
 //    should be returned
 // If everything goes well, then return a Result of a Person object
@@ -52,6 +52,34 @@ enum ParsePersonError {
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        // Step 1: Check if the input string is empty
+        if s.is_empty() {
+            return Err(ParsePersonError::Empty);
+        }
+        
+        // Step 2: Split the string on commas
+        let mut parts: Vec<&str> = s.split(',').collect();
+        
+        // Step 3: Check if there are exactly 2 parts
+        if parts.len() != 2 {
+            return Err(ParsePersonError::BadLen);
+        }
+        
+        // Step 4: Extract the name and check if it's empty
+        let name_part = parts[0];
+        if name_part.is_empty() {
+            return Err(ParsePersonError::NoName);
+        }
+        
+        // Step 5: Extract and parse the age
+        let age_part = parts[1];
+        let age = age_part.parse::<usize>().map_err(ParsePersonError::ParseInt)?;
+        
+        // Step 6: If all checks passed, return the Person object
+        Ok(Person {
+            name: name_part.to_string(),
+            age,
+        })
     }
 }
 
