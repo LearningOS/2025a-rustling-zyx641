@@ -50,13 +50,37 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        // 如果根节点为空，创建新的根节点
+        if self.root.is_none() {
+            self.root = Some(Box::new(TreeNode::new(value)));
+            return;
+        }
+        
+        // 否则，调用根节点的insert方法插入值
+        if let Some(ref mut root) = self.root {
+            root.insert(value);
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        // 如果树为空，返回false
+        if self.root.is_none() {
+            return false;
+        }
+        
+        // 从根节点开始搜索
+        let mut current = &self.root;
+        
+        while let Some(node) = current {
+            match node.value.cmp(&value) {
+                Ordering::Equal => return true,  // 找到了值
+                Ordering::Greater => current = &node.left,  // 在左子树中继续搜索
+                Ordering::Less => current = &node.right,  // 在右子树中继续搜索
+            }
+        }
+        
+        false  // 没有找到值
     }
 }
 
@@ -66,7 +90,28 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        match self.value.cmp(&value) {
+            // 如果值已存在，不做任何操作（处理重复值）
+            Ordering::Equal => return,
+            
+            // 如果新值小于当前节点值，插入到左子树
+            Ordering::Greater => {
+                if let Some(ref mut left) = self.left {
+                    left.insert(value);
+                } else {
+                    self.left = Some(Box::new(TreeNode::new(value)));
+                }
+            },
+            
+            // 如果新值大于当前节点值，插入到右子树
+            Ordering::Less => {
+                if let Some(ref mut right) = self.right {
+                    right.insert(value);
+                } else {
+                    self.right = Some(Box::new(TreeNode::new(value)));
+                }
+            },
+        }
     }
 }
 
@@ -121,6 +166,4 @@ mod tests {
             None => panic!("Root should not be None after insertion"),
         }
     }
-}    
-
-
+}
