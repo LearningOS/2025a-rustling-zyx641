@@ -15,15 +15,15 @@ pub trait Licensed {
     }
 }
 
-struct SomeSoftware {}
+struct SomeSoftware {} 
 
-struct OtherSoftware {}
+struct OtherSoftware {} 
 
-impl Licensed for SomeSoftware {}
-impl Licensed for OtherSoftware {}
+impl Licensed for SomeSoftware {} 
+impl Licensed for OtherSoftware {} 
 
 // YOU MAY ONLY CHANGE THE NEXT LINE
-fn compare_license_types(software: ??, software_two: ??) -> bool {
+fn compare_license_types(software: &impl Licensed, software_two: &impl Licensed) -> bool {
     software.licensing_info() == software_two.licensing_info()
 }
 
@@ -36,7 +36,7 @@ mod tests {
         let some_software = SomeSoftware {};
         let other_software = OtherSoftware {};
 
-        assert!(compare_license_types(some_software, other_software));
+        assert!(compare_license_types(&some_software, &other_software));
     }
 
     #[test]
@@ -44,6 +44,6 @@ mod tests {
         let some_software = SomeSoftware {};
         let other_software = OtherSoftware {};
 
-        assert!(compare_license_types(other_software, some_software));
+        assert!(compare_license_types(&other_software, &some_software));
     }
 }
